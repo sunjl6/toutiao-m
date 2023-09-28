@@ -57,12 +57,12 @@ export default {
             })
             this.$emit('update-isPostShow', result.data.data[0])
             this.$emit('update-totalCount', result.data.total_count)
-            this.$emit('close', false)
+            // this.$emit('close', false)
             this.message = ''
             this.$toast.success('评论成功')
         } catch (error) {
             console.log(error)
-            this.$emit('close', false)
+            // this.$emit('close', false)
             return this.$toast.fail('评论失败')
         }
     }

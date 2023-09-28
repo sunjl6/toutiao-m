@@ -47,7 +47,7 @@ export default {
       required: true
     },
     Totalcomments: {
-      type: Number,
+      type: [Number, String, Object],
       required: true
     }
   },

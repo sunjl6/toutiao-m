@@ -76,6 +76,7 @@
           :newAddCommentData="this.newAddCommentData"
           :articleId="this.article.id"
           :Totalcomments="this.Totalcomments"
+          type="a"
           @sendComments-data="getParentComponentCommentData"
           @onReply-Click="onReplyClick"
         ></articleComment>
@@ -86,6 +87,7 @@
           <!-- 使用封装的组件 -->
           <CommentPost
             :articleId="this.article.id"
+            type="a"
             @update-isPostShow="updateIsPostShow"
             @update-totalCount="updateTotalCount"
           ></CommentPost>
@@ -175,14 +177,16 @@ export default {
       isLoading: true,
       isArticleDelete: false,
       isfollowed: false,
-      Totalcomments: '',
+      Totalcomments: '0',
       // isFollowLoading: false
       isPostShow: false, // 控制底部发布评论弹出效果
       isReplyShow: false,
       newAddCommentData: {
         type: Object
       },
-      currentComment: ''
+      currentComment: {
+        type: [Object]
+      }
     };
   },
   computed: {},

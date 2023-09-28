@@ -45,11 +45,8 @@ export default {
     commentsData: {
       type: Object,
       required: true
-    },
-    Totalcomments: {
-      type: Number,
-      required: true
     }
+
   },
   data () {
     return {

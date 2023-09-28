@@ -10,7 +10,7 @@
       <!-- /当前评论项 -->
       <van-cell>全部回复</van-cell>
       <!-- 评论的回复列表 -->
-      <CommentList type="c" :articleId="currentComment.id" :newAddCommentData="this.newAddCommentData"></CommentList>
+      <CommentList type="c" :articleId="currentComment.id" :newAddCommentData="this.newAddCommentData" :Totalcomments="Totalcomments"></CommentList>
       <!-- /评论的回复列表 -->
     </div>
     <!-- 发布评论 -->
@@ -63,6 +63,7 @@ export default {
   mounted () {},
   methods: {
     getTotalCount (total) {
+      console.log('total' + total)
       this.Totalcomments = total
     },
     updatePostShow (data) {

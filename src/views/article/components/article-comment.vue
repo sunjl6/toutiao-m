@@ -50,7 +50,8 @@ export default {
         default: 'a'
       },
       Totalcomments: {
-        type: [Number, String]
+        type: [Number, String, Object],
+        required: true
       }
   },
   data () {
