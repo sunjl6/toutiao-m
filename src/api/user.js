@@ -2,7 +2,7 @@ import request from '@/utils/request'
 export const login = data => {
   return request({
       method: 'POST',
-      url: '/api/login',
+      url: '/toutiao/api/login',
       data
   })
 }
@@ -10,12 +10,23 @@ export const login = data => {
 export const getUserInfo = () => {
   return request({
       method: 'GET',
-      url: '/getUserInfo'
+      url: '/toutiao/getUserInfo'
   })
 }
-export const getCate = () => {
+
+// 取消关注
+export const deleteFollowUser = (params) => {
   return request({
-    method: 'GET',
-    url: '/article/cate'
+      method: 'DELETE',
+      url: '/toutiao/article/unFollowUser',
+      params
+  })
+}
+// 添加关注
+export const addFollowUser = (params) => {
+  return request({
+      method: 'POST',
+      url: '/toutiao/article/addFollowUser',
+      params
   })
 }

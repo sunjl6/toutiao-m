@@ -48,7 +48,6 @@ export default {
   methods: {
    async onRefresh () {
       // console.log('refresh')
-
       try {
         const res = await getRandomArticle({
           cate_id: this.pageInfo.cate_id

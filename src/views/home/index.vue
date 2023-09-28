@@ -1,79 +1,131 @@
 <template>
-    <div class="home-container">
-     <van-nav-bar class="page-nav-bar" fixed>
+  <div class="home-container">
+    <van-nav-bar class="page-nav-bar" fixed>
       <!-- <div class="van-nav-bar__title" > -->
-        <van-button
+      <van-button
         class="search-btn"
         slot="title"
         round
         type="info"
         size="small"
         icon="search"
-        >
-          搜索
-        </van-button>
+        to="/search"
+      >
+        搜索
+      </van-button>
       <!-- </div> -->
-     </van-nav-bar>
-     <van-tabs  class="channel-tabs" v-model="active" animated swipeable >
-      <van-tab :title= obj.name v-for="obj in cateList" :key="obj.id">
-        <articleList :channel = obj></articleList>
+    </van-nav-bar>
+    <van-tabs class="channel-tabs" v-model="active" animated swipeable>
+      <van-tab :title="obj.name" v-for="obj in cateList" :key="obj.id">
+        <articleList :channel="obj"></articleList>
       </van-tab>
       <div slot="nav-right" class="placeholder"></div>
-      <div slot="nav-right" class="hamburger-btn">
+      <div
+        slot="nav-right"
+        class="hamburger-btn"
+        @click="isChannelEditShow = true"
+      >
         <i class="toutiao toutiao-gengduo"></i>
       </div>
     </van-tabs>
-
-    </div>
-  </template>
+    <van-popup
+      v-model="isChannelEditShow"
+      closeable
+      position="bottom"
+      close-icon-position="top-left"
+      :style="{ height: '100%' }"
+    >
+      <channelEdit
+        @update-active="onUpdateActive"
+        :myChannel="cateList"
+        :active="active"
+        @please-del-Channel="onDelChannel"
+        @please-add-Channel="onAddChannel"
+      ></channelEdit>
+    </van-popup>
+  </div>
+</template>
 
   <script>
-  import { getCate } from '@/api/user';
-  import articleList from '@/views/home/components/article-list.vue'
-  export default {
-    name: 'HomeIndex',
-    components: {
-      articleList
+import { getCateUnReg, getMyArticle } from '@/api/article';
+import articleList from '@/views/home/components/article-list.vue';
+import channelEdit from './components/channel-edit.vue';
+import { getItem, setItem } from '@/utils/storage';
+export default {
+  name: 'HomeIndex',
+  components: {
+    articleList,
+    channelEdit
+  },
+  props: {},
+  data () {
+    return {
+      active: 0,
+      isChannelEditShow: false,
+      cateList: []
+    };
+  },
+  computed: {},
+  watch: {},
+  created () {
+    this.getArticleCate();
+  },
+  mounted () {},
+  methods: {
+    onAddChannel (channel) {
+      this.cateList.push(channel)
     },
-    props: {},
-    data () {
-      return {
-        active: 0,
-        cateList: []
-      }
+    onDelChannel (index) {
+      this.cateList.splice(index, 1)
     },
-    computed: {},
-    watch: {},
-    created () {
-      this.getArticleCate()
+    onUpdateActive (index, isChannelEditShow = true) {
+      this.active = index;
+      this.isChannelEditShow = isChannelEditShow;
     },
-    mounted () {},
-    methods: {
-      async getArticleCate () {
-        const res = await getCate()
-        if (res.data.status !== 0) {
-          return this.$toast(res.data.message)
+    async getArticleCate () {
+      if (this.$store.state.user) {
+        const res = await getMyArticle();
+        if (res.data.message.includes('身份认证失败')) {
+          this.$store.commit('setUser', null);
+          this.$store.commit('setUserId', null);
+          this.$toast(res.data.message);
         }
-         this.cateList = res.data.data
-        // console.log('res.data是' + res.data.data)
-        // console.log('list是' + this.cateList[0].name)
+        if (res.data.status !== 0) {
+          return this.$toast(res.data.message);
+        }
+        this.cateList = res.data.data;
+        console.log('已经登入');
+      } else {
+        if (getItem('TOUTIAO_CHANNELS')) {
+          this.cateList = getItem('TOUTIAO_CHANNELS');
+          console.log('未登入');
+          return;
+        }
+        const res = await getCateUnReg();
+        if (res.data.status !== 0) {
+          return this.$toast(res.data.message);
+        }
+        this.cateList = res.data.data;
+        setItem('TOUTIAO_CHANNELS', this.cateList);
+        console.log('未登入');
       }
     }
   }
-  </script>
+};
+</script>
 <style lang = "less" scoped>
-.home-container{
-  padding-top:176px;
+.home-container {
+  padding-top: 176px;
   padding-bottom: 100px;
-::v-deep .van-nav-bar__title {
+  ::v-deep .van-nav-bar__title {
     max-width: unset;
   }
-  .page-nav-bar{
-    .search-btn{
+  .page-nav-bar {
+    .search-btn {
       width: 555px;
       height: 64px;
-      background-color:#5babfb;
-      border:none;
+      background-color: #5babfb;
+      border: none;
       font-size: 28px;
     }
     ::v-deep .van-icon {
@@ -81,34 +133,34 @@
       color: antiquewhite;
     }
   }
-  ::v-deep .channel-tabs{
-    .van-tabs__wrap{
+  ::v-deep .channel-tabs {
+    .van-tabs__wrap {
       height: 82px;
       top: 92px;
-      position:fixed;
+      position: fixed;
       left: 0;
       right: 0;
       z-index: 1;
     }
-    .van-tab{
+    .van-tab {
       min-width: 200px;
       border-right: solid 1px #d6d6df;
       font-size: 30px;
       color: #777;
     }
-    .van-tab--active{
+    .van-tab--active {
       color: #333;
     }
-    .van-tabs__nav{
+    .van-tabs__nav {
       padding-bottom: 0;
     }
-    .van-tabs__line{
+    .van-tabs__line {
       bottom: 8px;
       width: 31px;
       height: 6px;
       background-color: #3296fa;
     }
-    .hamburger-btn{
+    .hamburger-btn {
       position: fixed;
       right: 0;
       width: 66px;
@@ -121,7 +173,7 @@
       i.toutiao {
         font-size: 35px;
       }
-      &:before{
+      &:before {
         content: "";
         position: absolute;
         left: 0;
@@ -131,7 +183,7 @@
         background-size: contain;
       }
     }
-    .placeholder{
+    .placeholder {
       flex-shrink: 0;
       width: 66px;
       height: 82px;

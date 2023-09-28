@@ -1,5 +1,14 @@
 <template>
-  <van-cell class="article-item">
+  <!--   :to="'/article/'+article.id"
+  :to="`/article/${article.id}`"-->
+  <van-cell class="article-item"
+  :to="{
+    name: 'article',
+    params: {
+      articleId: article.id
+    }
+  }"
+  >
     <div slot="title" class="title van-multi-ellipsis--l2">{{ article.title }}</div>
     <div slot="label">
         <div v-if="article.cover_img.length === 3" class="cover-wrap">
@@ -35,8 +44,10 @@ export default {
       type: Object,
       required: true
     }
+  },
+  created () {
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

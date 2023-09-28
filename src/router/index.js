@@ -6,12 +6,25 @@ import Home from '@/views/home'
 import My from '@/views/my'
 import Qa from '@/views/qa'
 import Video from '@/views/video'
+import Search from '@/views/search'
+import Article from '@/views/article'
 Vue.use(VueRouter)
 const routes = [
+  {
+    path: '/article/:articleId',
+    name: 'article',
+    component: Article,
+    props: true
+  },
   {
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
   },
   {
     path: '/',
