@@ -8,6 +8,7 @@ import Qa from '@/views/qa'
 import Video from '@/views/video'
 import Search from '@/views/search'
 import Article from '@/views/article'
+import User from '@/views/user-profile'
 Vue.use(VueRouter)
 const routes = [
   {
@@ -25,6 +26,11 @@ const routes = [
     path: '/search',
     name: 'search',
     component: Search
+  },
+  {
+    path: '/user/profile',
+    name: 'User-profile',
+    component: User
   },
   {
     path: '/',
